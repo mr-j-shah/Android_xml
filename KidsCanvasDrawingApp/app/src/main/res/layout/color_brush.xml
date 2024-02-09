@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_gravity="center">
+
+    <ImageButton
+        android:id="@+id/ib_color_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Brush Small Size"
+        android:src="@drawable/color_black"
+
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ib_color_blue" />
+    <ImageButton
+        android:id="@+id/ib_color_blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Brush Small Size"
+        android:src="@drawable/color_blue"
+
+        app:layout_constraintTop_toBottomOf="@id/ib_color_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ib_color_pink" />
+    <ImageButton
+        android:id="@+id/ib_color_pink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Brush Small Size"
+        android:src="@drawable/color_pink"
+
+        app:layout_constraintTop_toBottomOf="@+id/ib_color_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ib_color_yellow" />
+    <ImageButton
+        android:id="@+id/ib_color_yellow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Brush Small Size"
+        android:src="@drawable/color_yellow"
+
+        app:layout_constraintTop_toBottomOf="@+id/ib_color_pink"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ib_color_red" />
+    <ImageButton
+        android:id="@+id/ib_color_red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Brush Small Size"
+        android:src="@drawable/color_red"
+
+        app:layout_constraintTop_toBottomOf="@+id/ib_color_yellow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ib_color_green" />
+    <ImageButton
+        android:id="@+id/ib_color_green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Brush Small Size"
+        android:src="@drawable/color_green"
+
+        app:layout_constraintTop_toBottomOf="@+id/ib_color_red"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
