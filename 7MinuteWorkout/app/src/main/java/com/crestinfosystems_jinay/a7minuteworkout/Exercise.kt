@@ -12,11 +12,11 @@ val constant: MutableList<Exercise> = mutableListOf(
         name = "Abdominal Crunch",
         image = R.drawable.ic_abdominal_crunch
     ),
-    Exercise(
-        id = 2,
-        name = "Jumping Jack",
-        image = R.drawable.ic_jumping_jacks
-    ),
+//    Exercise(
+//        id = 2,
+//        name = "Jumping Jack",
+//        image = R.drawable.ic_jumping_jacks
+//    ),
 //    Exercise(
 //        id = 3,
 //        name = "Lunge",

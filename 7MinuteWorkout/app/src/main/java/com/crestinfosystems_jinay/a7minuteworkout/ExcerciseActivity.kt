@@ -22,7 +22,6 @@ class ExcerciseActivity : AppCompatActivity() {
 
         binding = ActivityExcerciseBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-
         setSupportActionBar(binding?.toolbarExercise)
         if (supportActionBar != null) {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -51,7 +50,7 @@ class ExcerciseActivity : AppCompatActivity() {
         binding?.exerciseImageview?.visibility = View.INVISIBLE
         binding?.nextExerciseTitle?.visibility = View.VISIBLE
         binding?.nextExerciseTitle?.text = "Next Exercise ${constant[currentEcercise].name}"
-        setRestProgressBar(2000)
+        setRestProgressBar(10000)
     }
 
     private fun setRestProgressBar(startTimer: Long) {
@@ -76,7 +75,7 @@ class ExcerciseActivity : AppCompatActivity() {
                     "Here now we will start doing ${constant[currentEcercise].name}",
                     Toast.LENGTH_SHORT
                 ).show()
-                setExerciseProgressBar(5000)
+                setExerciseProgressBar(30000)
                 binding?.nextExerciseTitle?.visibility = View.INVISIBLE
                 binding?.exerciseImageview?.visibility = View.VISIBLE
                 binding?.exerciseImageview?.setImageResource(constant[currentEcercise].image)
