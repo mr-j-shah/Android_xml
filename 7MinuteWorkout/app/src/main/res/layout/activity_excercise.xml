@@ -82,7 +82,18 @@
                 android:textStyle="bold" />
         </LinearLayout>
     </FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:foregroundGravity="center"
+        android:id="@+id/recycler_view_adapter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
 
+        app:layout_constraintTop_toBottomOf="@+id/countDown"
+        android:orientation="horizontal"
+        >
+
+    </androidx.recyclerview.widget.RecyclerView>
     <TextView
         android:id="@+id/next_exercise_title"
         android:layout_width="wrap_content"
@@ -93,5 +104,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countDown" />
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_adapter"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

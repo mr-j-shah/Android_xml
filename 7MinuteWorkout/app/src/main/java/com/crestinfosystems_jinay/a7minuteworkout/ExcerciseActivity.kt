@@ -1,5 +1,6 @@
 package com.crestinfosystems_jinay.a7minuteworkout
 
+import android.app.Dialog
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -7,7 +8,10 @@ import android.os.CountDownTimer
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.crestinfosystems_jinay.a7minuteworkout.databinding.ActivityExcerciseBinding
+import com.crestinfosystems_jinay.a7minuteworkout.databinding.DialogCustomBackConfirmationBinding
 
 class ExcerciseActivity : AppCompatActivity() {
     private var binding: ActivityExcerciseBinding? = null
@@ -17,6 +21,10 @@ class ExcerciseActivity : AppCompatActivity() {
 
     private var mediaPlayer: MediaPlayer? = null
     private var currentEcercise: Int = 0
+
+    private lateinit var rvAdapter: RvAdapter
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -27,11 +35,35 @@ class ExcerciseActivity : AppCompatActivity() {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         binding?.toolbarExercise?.setNavigationOnClickListener {
-            onBackPressed()
+            customDialogForBackButton(onpressed = {
+                if (restTimer != null) {
+                    restTimer?.cancel()
+                    restProgress = 0
+                }
+                binding = null
+                onBackPressed()
+            })
         }
         setRestView()
+        val layoutManager: RecyclerView.LayoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding?.recyclerViewAdapter?.layoutManager = layoutManager
+        binding?.recyclerViewAdapter?.scrollToPosition(currentEcercise);
+        rvAdapter = RvAdapter(constant, currentEcercise)
+        binding?.recyclerViewAdapter?.adapter = rvAdapter
     }
-
+    private fun customDialogForBackButton(onpressed: () -> Unit) {
+        val customDialog = Dialog(this)
+        var dialogBinding: DialogCustomBackConfirmationBinding? = DialogCustomBackConfirmationBinding.inflate(layoutInflater)
+        customDialog.setContentView(dialogBinding?.root!!)
+        dialogBinding?.dialogBtnYes?.setOnClickListener {
+            onpressed() 
+        }
+        dialogBinding?.dialogBtnNo?.setOnClickListener {
+            customDialog.dismiss()
+        }
+        customDialog.show()
+    }
     override fun onDestroy() {
         super.onDestroy()
         if (restTimer != null) {
@@ -50,7 +82,7 @@ class ExcerciseActivity : AppCompatActivity() {
         binding?.exerciseImageview?.visibility = View.INVISIBLE
         binding?.nextExerciseTitle?.visibility = View.VISIBLE
         binding?.nextExerciseTitle?.text = "Next Exercise ${constant[currentEcercise].name}"
-        setRestProgressBar(10000)
+        setRestProgressBar(2000)
     }
 
     private fun setRestProgressBar(startTimer: Long) {
@@ -75,7 +107,7 @@ class ExcerciseActivity : AppCompatActivity() {
                     "Here now we will start doing ${constant[currentEcercise].name}",
                     Toast.LENGTH_SHORT
                 ).show()
-                setExerciseProgressBar(30000)
+                setExerciseProgressBar(5000)
                 binding?.nextExerciseTitle?.visibility = View.INVISIBLE
                 binding?.exerciseImageview?.visibility = View.VISIBLE
                 binding?.exerciseImageview?.setImageResource(constant[currentEcercise].image)
@@ -104,6 +136,8 @@ class ExcerciseActivity : AppCompatActivity() {
                 mediaPlayer = MediaPlayer.create(this@ExcerciseActivity, R.raw.beep)
                 mediaPlayer?.start()
                 currentEcercise++
+                rvAdapter = RvAdapter(constant, currentEcercise)
+                binding?.recyclerViewAdapter?.adapter = rvAdapter
                 binding?.getReadyTitle?.text = "TAKE REST"
                 if (currentEcercise < constant.size) {
                     setRestView()
