@@ -137,6 +137,7 @@ class ExcerciseActivity : AppCompatActivity() {
                 mediaPlayer?.start()
                 currentEcercise++
                 rvAdapter = RvAdapter(constant, currentEcercise)
+                binding?.recyclerViewAdapter?.scrollToPosition(currentEcercise);
                 binding?.recyclerViewAdapter?.adapter = rvAdapter
                 binding?.getReadyTitle?.text = "TAKE REST"
                 if (currentEcercise < constant.size) {
