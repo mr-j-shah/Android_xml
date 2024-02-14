@@ -1,10 +1,8 @@
 package com.crestinfosystems_jinay.a7minuteworkout
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.FrameLayout
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.crestinfosystems_jinay.a7minuteworkout.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +17,15 @@ class MainActivity : AppCompatActivity() {
 
         binding?.flStart?.setOnClickListener {
             val intent = Intent(this, ExcerciseActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding?.BMIstart?.setOnClickListener {
+            val intent = Intent(this, BMICalculator::class.java)
+            startActivity(intent)
+        }
+        binding?.historyStart?.setOnClickListener {
+            val intent = Intent(this, HistroyActivity::class.java)
             startActivity(intent)
         }
     }
