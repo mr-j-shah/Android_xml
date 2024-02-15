@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="app_bar_dark">#FF4F6F52</color>
+    <color name="button_color">#FF739072</color>
+    <color name="primary_light_dark">#FF86A789</color>
+    <color name="primary_light">#FFD2E3C8</color>
 </resources>
