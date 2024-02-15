@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="app_bar_dark">#FF4F6F52</color>
-    <color name="button_color">#FF739072</color>
-    <color name="primary_light_dark">#FF86A789</color>
-    <color name="primary_light">#FFD2E3C8</color>
+    <color name="app_bar_dark" tools:override="true">#FF4F6F52</color>
+    <color name="button_color" tools:override="true">#FF739072</color>
+    <color name="primary_light_dark" tools:override="true">#FF86A789</color>
+    <color name="primary_light" tools:override="true">#FFD2E3C8</color>
 </resources>
