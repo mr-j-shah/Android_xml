@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         val layoutManager: RecyclerView.LayoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding?.recyclerViewAdapter?.layoutManager = layoutManager
-        val tileAdapter = PlaceTileAdapter(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13))
+        val tileAdapter = PlaceTileAdapter(listOf(1, 2, 3, 4, 5))
         binding?.recyclerViewAdapter?.adapter = tileAdapter
     }
 }
