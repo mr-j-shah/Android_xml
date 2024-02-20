@@ -72,20 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
         addBackgroundImageBtn = findViewById(R.id.ib_gallary)
         addBackgroundImageBtn?.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.READ_MEDIA_IMAGES
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                //TODO Add file selection function
-                openImagePicker()
-            } else {
-                Toast.makeText(
-                    this,
-                    "Please allow to Access Image from Gallery from Permission",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            openImagePicker()
         }
         imageView = findViewById(R.id.iv_background)
         drawingView?.setSizeForBrush(20.toFloat())

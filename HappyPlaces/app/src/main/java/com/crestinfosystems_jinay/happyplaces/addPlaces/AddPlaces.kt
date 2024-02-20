@@ -5,10 +5,13 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Location
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -19,8 +22,10 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.crestinfosystems_jinay.happyplaces.database.HappyPlaceDatabase
 import com.crestinfosystems_jinay.happyplaces.databinding.ActivityAddPlacesBinding
 import com.crestinfosystems_jinay.happyplaces.databinding.SelectImageDialogViewBinding
+import com.crestinfosystems_jinay.happyplaces.model.HappyPlace
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -30,7 +35,13 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.DexterError
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import java.util.Calendar
+import java.util.UUID
 
 
 class AddPlaces : AppCompatActivity() {
@@ -38,8 +49,12 @@ class AddPlaces : AppCompatActivity() {
     private var selectedDate: String? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var position: Location
+    private lateinit var imageUri: Uri;
+    private var mHappyPlace: HappyPlace? = null
+
     val FROM_FILE_REQUEST = 2
-    val CAMERA_REQUEST_CODE = 2
+    val CAMERA_REQUEST_CODE = 1
+    val IMAGE_DIREC = "HappyPlacesImages"
     private val pickImage =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -74,7 +89,21 @@ class AddPlaces : AppCompatActivity() {
             requestPermissions()
         }
         binding?.submitButton?.setOnClickListener {
-            Toast.makeText(this, "Submit Button Pressed", Toast.LENGTH_SHORT).show()
+            val happyPlaceDatabase = HappyPlaceDatabase(this, null)
+            val place = HappyPlace(
+                id = if (mHappyPlace == null) 0 else mHappyPlace!!.id,
+                title = binding?.textEditFieldName?.text.toString(),
+                description = binding?.textEditFieldDescription?.text.toString(),
+                date = binding?.textEditFieldCalender?.text.toString(),
+                location = binding?.textEditFieldLocation?.text.toString(),
+                imageURL = imageUri.toString(),
+            )
+            if (happyPlaceDatabase.addPlace(place) > 0) {
+                Toast.makeText(this@AddPlaces, "Place Added Successfully", Toast.LENGTH_SHORT)
+                    .show()
+                setResult(Activity.RESULT_OK)
+                this@AddPlaces.finish()
+            }
         }
         binding?.selectImageBtn?.setOnClickListener {
 //            requestCameraPermissions()
@@ -157,29 +186,63 @@ class AddPlaces : AppCompatActivity() {
             .onSameThread().check()
     }
 
+    @Suppress("DEPRECATION")
     private fun requestImageFromFilePermissions() {
         val intent = Intent(
             Intent.ACTION_PICK,
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
         intent.type = "image/*"
-        pickImage.launch(intent)
-//        startActivityForResult(intent, FROM_FILE_REQUEST)
+        startActivityForResult(intent, FROM_FILE_REQUEST)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             // The image capture was successful
-            Log.d("Image", "Image captured Successfully!!")
+
             val imageBitmap = data?.extras?.get("data") as Bitmap
+            imageUri = saveImageToInternalStorage(imageBitmap)
+            Log.e("Saved Image", "Path :: ${imageUri}")
             binding?.imageSelected?.setImageBitmap(imageBitmap)
             binding?.imageSelected?.visibility = View.VISIBLE
             binding?.imagePlaceholder?.visibility = View.GONE
             // Process the captured image as needed
         }
-        if (requestCode == FROM_FILE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            val selectedImageUri = data.data
+        if (requestCode == FROM_FILE_REQUEST && resultCode == Activity.RESULT_OK) {
+            val selectedImageUri = data!!.data
+//            imageUri = copyImageToPrivateExternalStorage(selectedImageUri!!)!!
+//            Log.e("Saved Image", "Path :: ${imageUri}")
+//            try {
+//                val sealectedImage =
+//                    MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
+//                imageUri = saveImageToInternalStorage(sealectedImage)
+//                Log.e("Saved Image", "Path :: ${imageUri}")
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//                Toast.makeText(
+//                    this@AddPlaces,
+//                    "Failed to load the Image from Gallery!",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+            val contentURI = data.data
+            try {
+                // Here this is used to get an bitmap from URI
+                @Suppress("DEPRECATION")
+                val selectedImageBitmap =
+                    MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)
+
+                imageUri =
+                    saveImageToInternalStorage(selectedImageBitmap)
+                Log.e("Saved Image : ", "Path :: $imageUri")
+
+                // Set the selected image from GALLERY to imageView.
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Toast.makeText(this@AddPlaces, "Failed!", Toast.LENGTH_SHORT)
+                    .show()
+            }
             binding?.imageSelected?.setImageURI(selectedImageUri)
             binding?.imageSelected?.visibility = View.VISIBLE
             binding?.imagePlaceholder?.visibility = View.GONE
@@ -288,5 +351,68 @@ class AddPlaces : AppCompatActivity() {
             dialog.dismiss()
         }
     }
+
+    private fun saveImageToInternalStorage(bitmap: Bitmap): Uri {
+        val wrapper = ContextWrapper(applicationContext)
+        var file = wrapper.getDir(IMAGE_DIREC, Context.MODE_PRIVATE)
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        try {
+            val stream: OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            stream.flush()
+            stream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(
+                this@AddPlaces,
+                "Failed to store image locally",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        return Uri.parse(file.absolutePath)
+    }
+
+    private fun copyImageToPrivateExternalStorage(selectedImageUri: Uri): Uri? {
+        try {
+            val inputStream: InputStream? = contentResolver.openInputStream(selectedImageUri)
+            if (inputStream != null) {
+                val wrapper = ContextWrapper(applicationContext)
+
+
+                val outputDir = wrapper.getDir(IMAGE_DIREC, Context.MODE_PRIVATE)
+
+
+                // Generate a unique filename using UUID
+                val outputFile = File(outputDir, "${UUID.randomUUID()}.jpg")
+
+                val outputStream: OutputStream = FileOutputStream(outputFile)
+                inputStream.copyTo(outputStream)
+
+                // Close the streams
+                inputStream.close()
+                outputStream.close()
+
+                // Notify the system that a new file has been created
+                MediaScannerConnection.scanFile(
+                    applicationContext,
+                    arrayOf(outputFile.absolutePath),
+                    null
+                ) { _, _ -> }
+
+                // Return the Uri of the copied image in private external storage
+                return Uri.parse(outputFile.absolutePath)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(
+                this@AddPlaces,
+                "Failed to copy image to private storage",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        return null
+    }
+
 
 }
