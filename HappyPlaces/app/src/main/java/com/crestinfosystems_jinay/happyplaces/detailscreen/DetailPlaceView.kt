@@ -28,5 +28,7 @@ class DetailPlaceView : AppCompatActivity() {
                 intent.getSerializableExtra("place") as HappyPlace
         }
         binding?.placeImage?.setImageURI(Uri.parse(place?.imageURL))
+        binding?.detailViewTitle?.text = place?.title
+        binding?.detailViewDescription?.text = place?.description
     }
 }
