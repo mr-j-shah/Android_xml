@@ -16,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import me.relex.circleindicator.CircleIndicator
 
 class splash_screen : AppCompatActivity() {
 
@@ -25,9 +26,12 @@ class splash_screen : AppCompatActivity() {
     lateinit var mAuth: FirebaseAuth
     var currentIndex: Int = 0
     var binding: ActivitySplashScreenBinding? = null
+    var indicator: CircleIndicator? = null
     override fun onCreate(savedInstanceState: Bundle?) {
 
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
+        indicator = binding?.indicator
+        indicator?.createIndicators(listOfPages.size, 0);
         super.onCreate(savedInstanceState)
         setContentView(binding?.root)
         binding?.splashScreenImage?.setImageResource(listOfPages[currentIndex].drawableImage)
@@ -35,6 +39,7 @@ class splash_screen : AppCompatActivity() {
         binding?.floatingActionButton?.setOnClickListener {
             if (currentIndex < listOfPages.size - 1) {
                 currentIndex++;
+                indicator?.animatePageSelected(currentIndex)
             }
             if (currentIndex == 3) {
                 binding?.floatingActionButton?.visibility = View.GONE
