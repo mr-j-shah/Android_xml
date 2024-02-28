@@ -1,10 +1,12 @@
 package com.crestinfosystems_jinay.trello.HomePage
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.crestinfosystems_jinay.trello.HomePage.ProfileScreen.Profile_Screen
 import com.crestinfosystems_jinay.trello.HomePage.subScreens.Screen_1
 import com.crestinfosystems_jinay.trello.HomePage.subScreens.Screen_2
 import com.crestinfosystems_jinay.trello.HomePage.subScreens.Setting_tab
@@ -33,6 +35,10 @@ class HomePage : AppCompatActivity() {
 //            startActivity(intent)
 //            this.finish()
 //        }
+        binding?.userProfileImage?.setOnClickListener {
+            var intent = Intent(this,Profile_Screen::class.java)
+            startActivity(intent)
+        }
         setBottomNavBarListner()
         setUserData()
     }
