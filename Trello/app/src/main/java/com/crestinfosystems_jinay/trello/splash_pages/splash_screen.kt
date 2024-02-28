@@ -2,20 +2,26 @@ package com.crestinfosystems_jinay.trello.splash_pages
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.crestinfosystems_jinay.trello.HomePage.HomePage
 import com.crestinfosystems_jinay.trello.R
+import com.crestinfosystems_jinay.trello.data.UserData
 import com.crestinfosystems_jinay.trello.databinding.ActivitySplashScreenBinding
+import com.crestinfosystems_jinay.trello.network.FirestoreDatabase
 import com.crestinfosystems_jinay.trello.splash_pages.data.listOfPages
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.auth
 import me.relex.circleindicator.CircleIndicator
 
 class splash_screen : AppCompatActivity() {
@@ -27,6 +33,7 @@ class splash_screen : AppCompatActivity() {
     var currentIndex: Int = 0
     var binding: ActivitySplashScreenBinding? = null
     var indicator: CircleIndicator? = null
+    var db: FirestoreDatabase = FirestoreDatabase()
     override fun onCreate(savedInstanceState: Bundle?) {
 
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
@@ -79,17 +86,21 @@ class splash_screen : AppCompatActivity() {
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-
+        var db = FirestoreDatabase()
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    val intent = Intent(this, HomePage::class.java)
-                    startActivity(intent)
+                    val user = Firebase.auth.currentUser
+                    db.readUserAndEntry(user!!.email!!){
+                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, HomePage::class.java)
+                        startActivity(intent)
+                    }
 
                 } else {
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(this, "Login Failed: ", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
                 }
             }
     }
