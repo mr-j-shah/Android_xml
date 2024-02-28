@@ -39,15 +39,15 @@ class HistroyActivity : AppCompatActivity() {
         binding?.toolbarExercise?.setNavigationOnClickListener {
             onBackPressed()
         }
-        val layoutManager: RecyclerView.LayoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            val layoutManager: RecyclerView.LayoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding?.recyclerViewAdapter?.layoutManager = layoutManager
         var list: List<History> = listOf(
             History(id = 0, timestamp = "1510500494"),
             History(id = 1, timestamp = "1034534442"),
             History(id = 2, timestamp = "1707898722")
         )
-        hoistoryAdapter = HistoryViewAdepter(historyList!!)
+        hoistoryAdapter = HistoryViewAdepter(historyList)
         binding?.recyclerViewAdapter?.adapter = hoistoryAdapter
     }
 }
