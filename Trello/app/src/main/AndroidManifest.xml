@@ -15,6 +15,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".splash_pages.UserDataForm.UserDataForm"
+            android:exported="false" />
+        <activity
             android:name=".HomePage.ProfileScreen.Profile_Screen"
             android:exported="false" />
         <activity

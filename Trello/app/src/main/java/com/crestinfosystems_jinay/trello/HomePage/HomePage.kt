@@ -29,14 +29,8 @@ class HomePage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding?.root)
         setCurrentFragment(firstFragment)
-//        binding?.logOutBtn?.setOnClickListener {
-//            FirebaseAuth.getInstance().signOut()
-//            var intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-//            this.finish()
-//        }
         binding?.userProfileImage?.setOnClickListener {
-            var intent = Intent(this,Profile_Screen::class.java)
+            var intent = Intent(this, Profile_Screen::class.java)
             startActivity(intent)
         }
         setBottomNavBarListner()

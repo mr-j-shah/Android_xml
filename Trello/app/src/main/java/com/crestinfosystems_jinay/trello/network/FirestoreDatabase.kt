@@ -20,6 +20,19 @@ class FirestoreDatabase {
     }
 
     fun writeNewUser(user: UserData) {
+        var userMap: MutableMap<String, Any> = mutableMapOf()
+        if (user.email != null) {
+            userMap["email"] = user.email.toString()
+        }
+        if (user.name != null) {
+            userMap["name"] = user.name.toString()
+        }
+        if (user.mobileNumber != null) {
+            userMap["mobileNumber"] = user.mobileNumber.toString()
+        }
+        if (user.organization != null) {
+            userMap["organization"] = user.organization.toString()
+        }
         if (user.email != null) {
             database.collection("Users").document(user.email.toString())
                 .set(user.toMap())
@@ -82,7 +95,8 @@ class FirestoreDatabase {
                         user = UserData(
                             email = user?.email ?: "",
                             name = user?.displayName ?: "",
-                            mobileNumber = user?.phoneNumber ?: ""
+                            mobileNumber = user?.phoneNumber ?: "",
+                            organization = ""
                         )
                     )
                     Log.d("Data of User", "Document does not exist")
