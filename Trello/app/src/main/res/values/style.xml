@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Customize stroke width and color for normal state -->
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeColor">@android:color/transparent</item>
+
+        <!-- Customize stroke width and color for error state -->
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxStrokeErrorColor">@android:color/transparent</item>
+    </style>
+</resources>

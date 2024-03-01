@@ -21,7 +21,7 @@ class Profile_Screen : AppCompatActivity() {
     var binding: ActivityProfileScreenBinding? = null
     var user = Firebase.auth.currentUser
     var db: FirestoreDatabase = FirestoreDatabase()
-    lateinit var data: UserData
+    var data: UserData? = null
     var isDataFetched: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityProfileScreenBinding.inflate(layoutInflater)
@@ -34,28 +34,47 @@ class Profile_Screen : AppCompatActivity() {
         binding?.editBtn?.setOnClickListener {
             if (isDataFetched) {
                 var intent = Intent(this, UserDataForm::class.java)
-                intent.putExtra("mobile_num", data.mobileNumber)
-                intent.putExtra("organization", data.organization)
-                intent.putExtra("email", data.email)
+                intent.putExtra("email", user?.email)
+                intent.putExtra("mobile_num", data?.mobileNumber)
+                intent.putExtra("organization", data?.organization)
+
                 startActivity(intent)
             }
         }
         Picasso.get().load(user?.photoUrl.toString()).into(binding?.userProfileImage)
         setContentView(binding?.root)
+        getUserData()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getUserData()
+    }
+
+    private fun getUserData() {
+        binding?.shimmerLayoutMobile?.visibility = View.VISIBLE
+        binding?.shimmerLayoutOrganization?.visibility = View.VISIBLE
+        binding?.userMobileNum?.visibility = View.GONE
+        binding?.userOrganization?.visibility = View.GONE
         CoroutineScope(Dispatchers.IO).launch {
             // Simulate data processing or fetching
-            data = db.readUser(user?.email!!)!!
+            data = db.readUser(user?.email!!)
+
             Log.d("User Data", data.toString())
             // Switch to the main thread to update the UI
             withContext(Dispatchers.Main) {
-//                binding?.editBtn?.isClickable = true;
                 isDataFetched = true;
                 binding?.shimmerLayoutMobile?.visibility = View.GONE
                 binding?.shimmerLayoutOrganization?.visibility = View.GONE
                 binding?.userMobileNum?.visibility = View.VISIBLE
-                binding?.userMobileNum?.text = data.mobileNumber
                 binding?.userOrganization?.visibility = View.VISIBLE
-                binding?.userOrganization?.text = data.organization
+                if (data != null) {
+                    binding?.userMobileNum?.text = data!!.mobileNumber
+                    binding?.userOrganization?.text = data!!.organization
+                }
+//                binding?.editBtn?.isClickable = true;
+
+
             }
         }
     }

@@ -19,7 +19,7 @@ class FirestoreDatabase {
         database = FirebaseFirestore.getInstance();
     }
 
-    fun writeNewUser(user: UserData) {
+    fun updateUser(user: UserData, onFailure: () -> Unit) {
         var userMap: MutableMap<String, Any> = mutableMapOf()
         if (user.email != null) {
             userMap["email"] = user.email.toString()
@@ -35,9 +35,16 @@ class FirestoreDatabase {
         }
         if (user.email != null) {
             database.collection("Users").document(user.email.toString())
-                .set(user.toMap())
+                .update(userMap)
         } else {
+            onFailure()
+        }
+    }
 
+    fun writeNewUser(user: UserData) {
+        if (user.email != null) {
+            database.collection("Users").document(user.email.toString())
+                .set(user.toMap())
         }
     }
 
