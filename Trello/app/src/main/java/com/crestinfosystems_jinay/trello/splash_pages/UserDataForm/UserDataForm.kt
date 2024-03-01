@@ -1,5 +1,6 @@
 package com.crestinfosystems_jinay.trello.splash_pages.UserDataForm
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.crestinfosystems_jinay.trello.data.UserData
 import com.crestinfosystems_jinay.trello.databinding.ActivityUserDataFormBinding
+import com.crestinfosystems_jinay.trello.databinding.DialogCustomBackConfirmationBinding
 import com.crestinfosystems_jinay.trello.network.FirestoreDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +22,7 @@ class UserDataForm : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityUserDataFormBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        binding?.popUpBackUserForm?.setOnClickListener { onBackPressed() }
+        binding?.popUpBackUserForm?.setOnClickListener { customDialogForBackButton() { onBackPressed() } }
         setContentView(binding?.root)
         updateDataButtonLisner()
         updateUIwithInitData()
@@ -29,6 +31,22 @@ class UserDataForm : AppCompatActivity() {
 
     private fun String?.toEditable(): Editable? {
         return Editable.Factory.getInstance().newEditable(this)
+    }
+
+    private fun customDialogForBackButton(onYesPressed: () -> Unit) {
+
+        val customDialog = Dialog(this)
+        var dialogBinding: DialogCustomBackConfirmationBinding? =
+            DialogCustomBackConfirmationBinding.inflate(layoutInflater)
+        customDialog.setContentView(dialogBinding?.root!!)
+        dialogBinding?.dialogBtnYes?.setOnClickListener {
+            onYesPressed()
+            customDialog.dismiss()
+        }
+        dialogBinding?.dialogBtnNo?.setOnClickListener {
+            customDialog.dismiss()
+        }
+        customDialog.show()
     }
 
     private fun updateUIwithInitData() {
