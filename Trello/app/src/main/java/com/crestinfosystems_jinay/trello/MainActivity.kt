@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import com.crestinfosystems_jinay.trello.HomePage.HomePage
+import com.crestinfosystems_jinay.trello.Screens_Activity.HomePage
 import com.crestinfosystems_jinay.trello.databinding.ActivityMainBinding
 import com.crestinfosystems_jinay.trello.splash_pages.splash_screen
 import com.google.firebase.auth.FirebaseAuth

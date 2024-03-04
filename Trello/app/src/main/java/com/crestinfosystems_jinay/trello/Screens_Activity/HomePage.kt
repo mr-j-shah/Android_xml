@@ -1,4 +1,4 @@
-package com.crestinfosystems_jinay.trello.HomePage
+package com.crestinfosystems_jinay.trello.Screens_Activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,10 +6,10 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.crestinfosystems_jinay.trello.HomePage.ProfileScreen.Profile_Screen
-import com.crestinfosystems_jinay.trello.HomePage.subScreens.Screen_1
-import com.crestinfosystems_jinay.trello.HomePage.subScreens.Screen_2
-import com.crestinfosystems_jinay.trello.HomePage.subScreens.Setting_tab
+import com.crestinfosystems_jinay.trello.Screens_Activity.setting.ProfileScreen.Profile_Screen
+import com.crestinfosystems_jinay.trello.Screens_Activity.subScreens.Screen_1
+import com.crestinfosystems_jinay.trello.Screens_Activity.subScreens.Screen_2
+import com.crestinfosystems_jinay.trello.Screens_Activity.subScreens.Setting_tab
 import com.crestinfosystems_jinay.trello.R
 import com.crestinfosystems_jinay.trello.databinding.ActivityHomePageBinding
 import com.google.firebase.Firebase

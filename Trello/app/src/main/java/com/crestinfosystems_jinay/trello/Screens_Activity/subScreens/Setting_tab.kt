@@ -1,15 +1,17 @@
-package com.crestinfosystems_jinay.trello.HomePage.subScreens
+package com.crestinfosystems_jinay.trello.Screens_Activity.subScreens
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.crestinfosystems_jinay.trello.HomePage.ProfileScreen.Profile_Screen
 import com.crestinfosystems_jinay.trello.MainActivity
 import com.crestinfosystems_jinay.trello.R
+import com.crestinfosystems_jinay.trello.Screens_Activity.setting.ProfileScreen.Profile_Screen
+import com.crestinfosystems_jinay.trello.Screens_Activity.setting.projects.ProjectList
 import com.crestinfosystems_jinay.trello.adapter.SettingTabAdapter
 import com.crestinfosystems_jinay.trello.data.SettinsTilesFilelds
 import com.crestinfosystems_jinay.trello.databinding.FragmentSettingTabBinding
@@ -42,8 +44,16 @@ class Setting_tab : Fragment() {
             SettinsTilesFilelds(
                 id = 2,
                 title = "Projects",
-                icon = R.drawable.ic_setting_project,
-                {}),
+                icon = R.drawable.ic_setting_project
+            ) {
+                var intent = Intent(activity, ProjectList::class.java)
+                startActivity(intent)
+                Toast.makeText(
+                    activity,
+                    "This List will show Project Assigned to You!!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            },
             SettinsTilesFilelds(
                 id = 3,
                 title = "Terms and Conditions",

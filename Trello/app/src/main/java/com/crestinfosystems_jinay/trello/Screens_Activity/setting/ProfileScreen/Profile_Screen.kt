@@ -1,4 +1,4 @@
-package com.crestinfosystems_jinay.trello.HomePage.ProfileScreen
+package com.crestinfosystems_jinay.trello.Screens_Activity.setting.ProfileScreen
 
 import android.content.Intent
 import android.os.Bundle

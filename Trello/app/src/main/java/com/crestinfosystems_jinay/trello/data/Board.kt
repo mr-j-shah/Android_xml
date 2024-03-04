@@ -17,6 +17,8 @@ data class Board(
     ) {
     }
 
+
+
     override fun writeToParcel(parcel: Parcel, flags: Int) = with(parcel) {
         parcel.writeString(name)
         parcel.writeString(des)
@@ -32,7 +34,14 @@ data class Board(
         override fun createFromParcel(parcel: Parcel): Board {
             return Board(parcel)
         }
-
+        fun toObj(data: Map<String, Any>): Board {
+            return Board(
+                name = data["name"].toString(),
+                des = data["des"].toString(),
+                createdBy = data["createdBy"].toString(),
+                assignedTo = data["assignedTo"] as ArrayList<String>
+            )
+        }
         override fun newArray(size: Int): Array<Board?> {
             return arrayOfNulls(size)
         }

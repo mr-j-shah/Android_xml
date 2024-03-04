@@ -2,14 +2,12 @@ package com.crestinfosystems_jinay.trello.splash_pages
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.crestinfosystems_jinay.trello.HomePage.HomePage
+import com.crestinfosystems_jinay.trello.Screens_Activity.HomePage
 import com.crestinfosystems_jinay.trello.R
-import com.crestinfosystems_jinay.trello.data.UserData
 import com.crestinfosystems_jinay.trello.databinding.ActivitySplashScreenBinding
 import com.crestinfosystems_jinay.trello.network.FirestoreDatabase
 import com.crestinfosystems_jinay.trello.splash_pages.data.listOfPages

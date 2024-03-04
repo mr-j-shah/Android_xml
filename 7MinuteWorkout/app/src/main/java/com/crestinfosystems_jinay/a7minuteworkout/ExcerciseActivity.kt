@@ -56,10 +56,10 @@ class ExcerciseActivity : AppCompatActivity() {
         val customDialog = Dialog(this)
         var dialogBinding: DialogCustomBackConfirmationBinding? = DialogCustomBackConfirmationBinding.inflate(layoutInflater)
         customDialog.setContentView(dialogBinding?.root!!)
-        dialogBinding?.dialogBtnYes?.setOnClickListener {
+        dialogBinding.dialogBtnYes.setOnClickListener {
             onpressed() 
         }
-        dialogBinding?.dialogBtnNo?.setOnClickListener {
+        dialogBinding.dialogBtnNo.setOnClickListener {
             customDialog.dismiss()
         }
         customDialog.show()
