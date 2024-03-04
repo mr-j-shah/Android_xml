@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.crestinfosystems_jinay.trello.adapter.BoardRecycleViewAd
 import com.crestinfosystems_jinay.trello.databinding.ActivityProjectListBinding
 import com.crestinfosystems_jinay.trello.network.readProjectsByUserEmail
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,7 +30,7 @@ class ProjectList : AppCompatActivity() {
 
     private fun fetchData() {
         CoroutineScope(Dispatchers.IO).launch {
-            var list = readProjectsByUserEmail("shahjinay02@gmail.com")
+            var list = readProjectsByUserEmail(Firebase.auth.currentUser?.email!!)
             withContext(Dispatchers.Main) {
                 binding?.progressCircular?.visibility = View.GONE
                 binding?.recyclerViewAdapter?.visibility = View.VISIBLE
