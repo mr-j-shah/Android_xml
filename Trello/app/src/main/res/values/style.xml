@@ -10,4 +10,12 @@
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="boxStrokeErrorColor">@android:color/transparent</item>
     </style>
+    <style name="MyButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.Button.Rounded</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.Button.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
 </resources>
