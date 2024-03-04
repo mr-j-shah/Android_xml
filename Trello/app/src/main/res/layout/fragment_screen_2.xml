@@ -8,12 +8,13 @@
     <!-- TODO: Update blank fragment layout -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
+        style="@style/AppTheme.FabStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_edit"
-        android:tint="@color/black" />
+        android:layout_margin="20dp"
+
+        android:src="@drawable/ic_fab_icon" />
 </FrameLayout>
