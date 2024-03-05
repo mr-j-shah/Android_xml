@@ -7,11 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.crestinfosystems_jinay.trello.adapter.AutoCompleteViewAd
+import com.crestinfosystems_jinay.trello.adapter.BoardRecycleViewAd
 import com.crestinfosystems_jinay.trello.data.Board
 import com.crestinfosystems_jinay.trello.databinding.FragmentBoardBottomSheetBinding
 import com.crestinfosystems_jinay.trello.databinding.FragmentScreen2Binding
 import com.crestinfosystems_jinay.trello.network.createNewBoard
+import com.crestinfosystems_jinay.trello.network.readAllProjectsByUserEmail
 import com.crestinfosystems_jinay.trello.network.readUserAllUserOnApplication
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
@@ -31,6 +35,11 @@ class Screen_2 : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onResume() {
+        super.onResume()
+        fetchData()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,6 +49,10 @@ class Screen_2 : Fragment() {
         binding?.fab?.setOnClickListener {
             Dialogfunction()
         }
+        val layoutManager: RecyclerView.LayoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        binding?.recyclerViewAdapter?.layoutManager = layoutManager
+        fetchData()
         return binding?.root
     }
 
@@ -82,7 +95,9 @@ class Screen_2 : Fragment() {
                     assignedTo = assignTo as ArrayList<String>
                 )
             ) {
+                binding?.progressCircular?.visibility = View.VISIBLE
                 dialog.dismiss()
+                fetchData()
                 Toast.makeText(activity, "Board Created Successfully", Toast.LENGTH_SHORT).show()
             }
         }
@@ -102,6 +117,19 @@ class Screen_2 : Fragment() {
         }
         // Add chip to the ChipGroup
         bottomSheetBinding.chipGroup.addView(chip)
+    }
+
+    private fun fetchData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            var list = readAllProjectsByUserEmail(Firebase.auth.currentUser?.email!!)
+            withContext(Dispatchers.Main) {
+                binding?.progressCircular?.visibility = View.GONE
+                binding?.recyclerViewAdapter?.visibility = View.VISIBLE
+                var baoardAdapter = list?.let { BoardRecycleViewAd(it) }
+                binding?.recyclerViewAdapter?.adapter = baoardAdapter
+                Log.d("DATA", "fetchData: ${list.toString()} ")
+            }
+        }
     }
 
     override fun onDestroyView() {

@@ -36,7 +36,6 @@ class ProjectList : AppCompatActivity() {
                 binding?.recyclerViewAdapter?.visibility = View.VISIBLE
                 var baoardAdapter = list?.let { BoardRecycleViewAd(it) }
                 binding?.recyclerViewAdapter?.adapter = baoardAdapter
-
             }
         }
     }

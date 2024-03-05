@@ -63,3 +63,32 @@ suspend fun readProjectsByUserEmail(email: String): List<Board>? {
             }
     }
 }
+
+suspend fun readAllProjectsByUserEmail(email: String): List<Board>? {
+    return suspendCancellableCoroutine { continuation ->
+        val ref: CollectionReference = database.collection("Boards")
+        ref.get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val userListEmail: MutableList<Board> = mutableListOf()
+                    for (document in task.result!!) {
+                        val boardData: MutableMap<String, Any> = document.data
+                        if ((boardData["assignedTo"] as List<String>).contains(email)) {
+                            userListEmail.add(Board.toObj(boardData))
+                        }
+                        if (
+                            (boardData["createdBy"] as String) == email
+                        ) {
+                            userListEmail.add(Board.toObj(boardData))
+                        }
+                    }
+                    continuation.resume(userListEmail)
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resume(null)
+            }
+    }
+}
