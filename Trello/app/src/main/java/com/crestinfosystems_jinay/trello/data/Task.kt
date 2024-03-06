@@ -19,10 +19,10 @@ data class Task(
     companion object {
         fun toObj(data: Map<String, Any>): Task {
             return Task(
-                title = data["email"].toString() ?: "",
-                desc = data["email"].toString() ?: "",
-                lastEdit = data["email"].toString() ?: "",
-                state =  State.valueOf(data["email"].toString())
+                title = data["title"].toString() ?: "",
+                desc = data["desc"].toString() ?: "",
+                lastEdit = data["lastEdit"].toString() ?: "",
+                state =  State.valueOf(data["state"].toString())
             )
         }
     }

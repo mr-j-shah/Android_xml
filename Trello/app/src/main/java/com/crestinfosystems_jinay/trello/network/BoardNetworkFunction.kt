@@ -1,6 +1,7 @@
 package com.crestinfosystems_jinay.trello.network
 
 import com.crestinfosystems_jinay.trello.data.Board
+import com.crestinfosystems_jinay.trello.data.Task
 import com.crestinfosystems_jinay.trello.data.UserData
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.CollectionReference
@@ -18,6 +19,15 @@ fun createNewBoard(board: Board, onTap: () -> Unit) {
                 onTap()
             }
         realTimeDatabase.reference.child("Projects").child(board.name).setValue(board)
+    }
+}
+
+fun addNewTask(task: Task, board: Board, onTap: () -> Unit) {
+    if (task.title != null) {
+        realTimeDatabase.reference.child("Projects").child(board.name).child("task").push()
+            .setValue(task).addOnSuccessListener {
+                onTap()
+            }
     }
 }
 

@@ -51,7 +51,7 @@
                 android:layout_height="42dp"
 
                 app:hintTextColor="@color/white"
-                app:placeholderText="e.g. Trello"
+                app:placeholderText="e.g. Login Modal"
                 app:placeholderTextColor="@color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -64,8 +64,7 @@
                     android:inputType="text"
                     android:padding="8dp"
 
-                    android:textColor="@color/white"
-                    app:placeholderText="Organization" />
+                    android:textColor="@color/white" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -113,7 +112,7 @@
                 android:layout_height="wrap_content"
 
                 app:hintTextColor="@color/white"
-                app:placeholderText="e.g. My First Project"
+                app:placeholderText="e.g. Update Login Model Color"
                 app:placeholderTextColor="@color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -176,7 +175,7 @@
 
         <androidx.cardview.widget.CardView
 
-            android:id="@+id/update_btn"
+            android:id="@+id/add_btn"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
 

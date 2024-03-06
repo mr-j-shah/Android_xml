@@ -2,18 +2,32 @@ package com.crestinfosystems_jinay.trello.Screens_Activity.setting.projects
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.crestinfosystems_jinay.trello.adapter.TaskAdapter
 import com.crestinfosystems_jinay.trello.data.Board
+import com.crestinfosystems_jinay.trello.data.State
+import com.crestinfosystems_jinay.trello.data.Task
 import com.crestinfosystems_jinay.trello.databinding.ActivityDetailProjectViewBinding
 import com.crestinfosystems_jinay.trello.databinding.AddTaskBottomSheetBinding
+import com.crestinfosystems_jinay.trello.network.addNewTask
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class Detail_Project_View : AppCompatActivity() {
+    var list = mutableListOf<Task>()
     var binding: ActivityDetailProjectViewBinding? = null
+    var baoardAdapter = TaskAdapter(
+        arrayListOf()
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityDetailProjectViewBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -29,8 +43,16 @@ class Detail_Project_View : AppCompatActivity() {
             onBackPressed()
         }
         binding?.floatingActionButton?.setOnClickListener {
-            Dialogfunction()
+            Dialogfunction(board)
         }
+        setAdpater()
+    }
+
+    private fun setAdpater() {
+        val layoutManager: RecyclerView.LayoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding?.recyclerViewAdapter?.layoutManager = layoutManager
+        binding?.recyclerViewAdapter?.adapter = baoardAdapter
     }
 
     private fun realTimeDataChange(board: Board) {
@@ -38,12 +60,21 @@ class Detail_Project_View : AppCompatActivity() {
             .addValueEventListener(object :
                 ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    list.clear()
                     val value = snapshot.getValue(false) as Map<*, *>
-                    Log.d(
-                        "Task List",
-                        "Task List for ${board.name} :: ${value["task"].toString()}"
-                    )
-                    binding?.datafromdb?.text = value.toString()
+                    if (value["task"] != null) {
+                        val taskList = value["task"] as Map<*, *>
+                        for ((key, value) in taskList) {
+                            Log.d(
+                                "Task List",
+                                "Task List for ${key} :: ${
+                                    Task.toObj(value as Map<String, Any>)
+                                }"
+                            )
+                            list.add(Task.toObj(value as Map<String, Any>))
+                        }
+                    }
+                    baoardAdapter.submitList(list as ArrayList<Task>)
                     println("Data from Firebase: $value")
                 }
 
@@ -54,50 +85,30 @@ class Detail_Project_View : AppCompatActivity() {
             })
     }
 
-    private fun Dialogfunction() {
-//        var user = Firebase.auth.currentUser
-//        var suggestions: List<String> = listOf()
+    private fun Dialogfunction(board: Board) {
+        var user = Firebase.auth.currentUser
         val bottomSheetBinding = AddTaskBottomSheetBinding.inflate(layoutInflater)
-//        CoroutineScope(Dispatchers.IO).launch {
-//            var data = readUserAllUserOnApplication()
-//            Log.d("User Data", data.toString())
-//            withContext(Dispatchers.Main) {
-//                isDataFetched = true;
-//                bottomSheetBinding.bottomBarContent.visibility = View.VISIBLE
-//                if (data != null) {
-//                    suggestions = data
-//                }
-//                suggestions -= user?.email!!
-//                val customAdapter = activity?.let {
-//                    AutoCompleteViewAd(it, suggestions) { selectedSuggestion ->
-//                        // Handle the custom event when a suggestion is tapped
-//                        Toast.makeText(it, "User: $selectedSuggestion", Toast.LENGTH_SHORT).show()
-//                        if (!assignTo.contains(selectedSuggestion)) {
-//                            addChip(selectedSuggestion, bottomSheetBinding)
-//                        }
-//                        bottomSheetBinding.autoCompleteTextView.setText("")
-//                    }
-//                }
-//                bottomSheetBinding.autoCompleteTextView.setAdapter(customAdapter)
-//            }
-//        }
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(bottomSheetBinding.root)
-//        bottomSheetBinding.updateBtn.setOnClickListener {
-//            createNewBoard(
-//                board = Board(
-//                    name = bottomSheetBinding.textInputLayoutBoardnameEdit.text.toString(),
-//                    des = bottomSheetBinding.textInputLayoutBoarddescEdit.text.toString(),
-//                    createdBy = user?.email!!,
-//                    assignedTo = assignTo as ArrayList<String>
-//                )
-//            ) {
-//                binding?.progressCircular?.visibility = View.VISIBLE
-//                dialog.dismiss()
-//                fetchData()
-//                Toast.makeText(activity, "Board Created Successfully", Toast.LENGTH_SHORT).show()
-//            }
-//        }
+        bottomSheetBinding.addBtn.setOnClickListener {
+            addNewTask(
+                task = Task(
+                    title = bottomSheetBinding.textInputLayoutBoardnameEdit.text.toString(),
+                    desc = bottomSheetBinding.textInputLayoutBoarddescEdit.text.toString(),
+                    lastEdit = user?.email.toString(),
+                    state = State.todo
+                ),
+                board = Board(
+                    name = board.name,
+                    des = board.des,
+                    createdBy = board.createdBy,
+                    assignedTo = board.assignedTo
+                )
+            ) {
+                dialog.dismiss()
+                Toast.makeText(this, "Task Created Successfully", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         dialog.show()
     }

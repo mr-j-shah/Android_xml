@@ -43,7 +43,7 @@ class Setting_tab : Fragment() {
             },
             SettinsTilesFilelds(
                 id = 2,
-                title = "Projects",
+                title = "Projects (assigned to you)",
                 icon = R.drawable.ic_setting_project
             ) {
                 var intent = Intent(activity, ProjectList::class.java)

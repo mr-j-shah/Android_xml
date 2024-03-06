@@ -6,11 +6,11 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.crestinfosystems_jinay.trello.R
 import com.crestinfosystems_jinay.trello.Screens_Activity.setting.ProfileScreen.Profile_Screen
 import com.crestinfosystems_jinay.trello.Screens_Activity.subScreens.Screen_1
 import com.crestinfosystems_jinay.trello.Screens_Activity.subScreens.Screen_2
 import com.crestinfosystems_jinay.trello.Screens_Activity.subScreens.Setting_tab
-import com.crestinfosystems_jinay.trello.R
 import com.crestinfosystems_jinay.trello.databinding.ActivityHomePageBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -55,13 +55,9 @@ class HomePage : AppCompatActivity() {
             setCurrentFragment(secondFragment)
             setScreenIndicator(2)
         }
-        binding?.tab3?.setOnClickListener {
-            setCurrentFragment(firstFragment)
-            setScreenIndicator(3)
-        }
         binding?.tab4?.setOnClickListener {
             setCurrentFragment(settingFragment)
-            setScreenIndicator(4)
+            setScreenIndicator(3)
         }
     }
 
@@ -70,27 +66,22 @@ class HomePage : AppCompatActivity() {
             1 -> {
                 binding?.tab1Indicator?.visibility = View.VISIBLE
                 binding?.tab2Indicator?.visibility = View.GONE
-                binding?.tab3Indicator?.visibility = View.GONE
+
                 binding?.tab4Indicator?.visibility = View.GONE
             }
 
             2 -> {
                 binding?.tab1Indicator?.visibility = View.GONE
-                binding?.tab3Indicator?.visibility = View.GONE
+
                 binding?.tab4Indicator?.visibility = View.GONE
                 binding?.tab2Indicator?.visibility = View.VISIBLE
             }
 
+
+
             3 -> {
                 binding?.tab2Indicator?.visibility = View.GONE
-                binding?.tab1Indicator?.visibility = View.GONE
-                binding?.tab4Indicator?.visibility = View.GONE
-                binding?.tab3Indicator?.visibility = View.VISIBLE
-            }
 
-            4 -> {
-                binding?.tab2Indicator?.visibility = View.GONE
-                binding?.tab3Indicator?.visibility = View.GONE
                 binding?.tab1Indicator?.visibility = View.GONE
                 binding?.tab4Indicator?.visibility = View.VISIBLE
             }
