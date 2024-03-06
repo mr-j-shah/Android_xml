@@ -1,6 +1,8 @@
 package com.crestinfosystems_jinay.trello.Screens_Activity.setting.projects
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -86,30 +88,81 @@ class Detail_Project_View : AppCompatActivity() {
     }
 
     private fun Dialogfunction(board: Board) {
+        var isCorrectName = false
+        var isCorrectDes = false
         var user = Firebase.auth.currentUser
         val bottomSheetBinding = AddTaskBottomSheetBinding.inflate(layoutInflater)
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(bottomSheetBinding.root)
+        bottomSheetBinding.textInputLayoutBoardnameEdit.addTextChangedListener(object :
+            TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString().length > 2) {
+                    bottomSheetBinding.textInputLayoutBoardnameEdit.error = null
+                    isCorrectName = true
+                } else {
+                    bottomSheetBinding.textInputLayoutBoardnameEdit.error =
+                        "Enter Correct Task Name"
+                    isCorrectName = false
+                }
+            }
+        })
+        bottomSheetBinding.textInputLayoutBoarddescEdit.addTextChangedListener(object :
+            TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s!!.isNotEmpty()) {
+                    bottomSheetBinding.textInputLayoutBoarddescEdit.error = null
+                    isCorrectDes = true
+                } else {
+                    bottomSheetBinding.textInputLayoutBoarddescEdit.error =
+                        "Add Description"
+
+                    isCorrectDes = false
+                }
+            }
+        })
+        bottomSheetBinding.cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
         bottomSheetBinding.addBtn.setOnClickListener {
-            addNewTask(
-                task = Task(
-                    title = bottomSheetBinding.textInputLayoutBoardnameEdit.text.toString(),
-                    desc = bottomSheetBinding.textInputLayoutBoarddescEdit.text.toString(),
-                    lastEdit = user?.email.toString(),
-                    state = State.todo
-                ),
-                board = Board(
-                    name = board.name,
-                    des = board.des,
-                    createdBy = board.createdBy,
-                    assignedTo = board.assignedTo
-                )
-            ) {
-                dialog.dismiss()
-                Toast.makeText(this, "Task Created Successfully", Toast.LENGTH_SHORT).show()
+            if (isCorrectName && isCorrectDes) {
+                addNewTask(
+                    task = Task(
+                        title = bottomSheetBinding.textInputLayoutBoardnameEdit.text.toString(),
+                        desc = bottomSheetBinding.textInputLayoutBoarddescEdit.text.toString(),
+                        lastEdit = user?.email.toString(),
+                        state = State.todo
+                    ),
+                    board = Board(
+                        name = board.name,
+                        des = board.des,
+                        createdBy = board.createdBy,
+                        assignedTo = board.assignedTo
+                    )
+                ) {
+                    dialog.dismiss()
+                    Toast.makeText(this, "Task Created Successfully", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Fill Data Properly", Toast.LENGTH_SHORT).show()
             }
         }
-
         dialog.show()
     }
 }

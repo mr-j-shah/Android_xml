@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@drawable/bottom_sheet_background"
+    android:backgroundTint="@color/white"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -200,15 +201,15 @@
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
-
+            android:id="@+id/cancel_button"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-
             android:layout_marginHorizontal="30dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:backgroundTint="#0EA5E9"
+            android:clickable="true"
 
             app:cardCornerRadius="10dp">
 

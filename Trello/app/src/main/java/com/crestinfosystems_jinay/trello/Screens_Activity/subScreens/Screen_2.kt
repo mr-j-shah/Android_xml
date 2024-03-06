@@ -86,6 +86,9 @@ class Screen_2 : Fragment() {
         }
         val dialog = BottomSheetDialog(requireContext())
         dialog.setContentView(bottomSheetBinding.root)
+        bottomSheetBinding.cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
         bottomSheetBinding.updateBtn.setOnClickListener {
             createNewBoard(
                 board = Board(

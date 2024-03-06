@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.crestinfosystems_jinay.trello.data.UserData
 import com.crestinfosystems_jinay.trello.databinding.ActivityProfileScreenBinding
 import com.crestinfosystems_jinay.trello.network.FirestoreDatabase
-import com.crestinfosystems_jinay.trello.splash_pages.UserDataForm.UserDataForm
+import com.crestinfosystems_jinay.trello.Screens_Activity.setting.ProfileScreen.UserDataForm.UserDataForm
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
