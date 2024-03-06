@@ -1,6 +1,8 @@
 package com.crestinfosystems_jinay.trello.Screens_Activity.subScreens
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -57,6 +59,8 @@ class Screen_2 : Fragment() {
     }
 
     private fun Dialogfunction() {
+        var isCorrectName = false
+        var isCorrectDes = false
         var user = Firebase.auth.currentUser
         var suggestions: List<String> = listOf()
         val bottomSheetBinding = FragmentBoardBottomSheetBinding.inflate(layoutInflater)
@@ -86,22 +90,79 @@ class Screen_2 : Fragment() {
         }
         val dialog = BottomSheetDialog(requireContext())
         dialog.setContentView(bottomSheetBinding.root)
+        bottomSheetBinding.textInputLayoutBoardnameEdit.addTextChangedListener(object :
+            TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                if (s.toString().length > 2) {
+                    bottomSheetBinding.textInputLayoutBoardnameEdit.error = null
+                    isCorrectName = true
+                } else {
+                    bottomSheetBinding.textInputLayoutBoardnameEdit.error =
+                        "Enter Correct Task Name"
+                    isCorrectName = false
+                }
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString().length > 2) {
+                    bottomSheetBinding.textInputLayoutBoardnameEdit.error = null
+                    isCorrectName = true
+                } else {
+                    bottomSheetBinding.textInputLayoutBoardnameEdit.error =
+                        "Enter Correct Task Name"
+                    isCorrectName = false
+                }
+            }
+        })
+        bottomSheetBinding.textInputLayoutBoarddescEdit.addTextChangedListener(object :
+            TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s!!.isNotEmpty()) {
+                    bottomSheetBinding.textInputLayoutBoarddescEdit.error = null
+                    isCorrectDes = true
+                } else {
+                    bottomSheetBinding.textInputLayoutBoarddescEdit.error =
+                        "Add Description"
+
+                    isCorrectDes = false
+                }
+            }
+        })
         bottomSheetBinding.cancelButton.setOnClickListener {
             dialog.dismiss()
         }
         bottomSheetBinding.updateBtn.setOnClickListener {
-            createNewBoard(
-                board = Board(
-                    name = bottomSheetBinding.textInputLayoutBoardnameEdit.text.toString(),
-                    des = bottomSheetBinding.textInputLayoutBoarddescEdit.text.toString(),
-                    createdBy = user?.email!!,
-                    assignedTo = assignTo as ArrayList<String>
-                )
-            ) {
-                binding?.progressCircular?.visibility = View.VISIBLE
-                dialog.dismiss()
-                fetchData()
-                Toast.makeText(activity, "Board Created Successfully", Toast.LENGTH_SHORT).show()
+            if (isCorrectDes && isCorrectName) {
+                createNewBoard(
+                    board = Board(
+                        name = bottomSheetBinding.textInputLayoutBoardnameEdit.text.toString(),
+                        des = bottomSheetBinding.textInputLayoutBoarddescEdit.text.toString(),
+                        createdBy = user?.email!!,
+                        assignedTo = assignTo as ArrayList<String>
+                    )
+                ) {
+                    binding?.progressCircular?.visibility = View.VISIBLE
+                    dialog.dismiss()
+                    fetchData()
+                    Toast.makeText(activity, "Board Created Successfully", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+            else{
+                Toast.makeText(activity, "Enter Correct Details", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
