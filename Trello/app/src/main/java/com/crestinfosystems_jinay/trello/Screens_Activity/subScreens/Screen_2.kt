@@ -125,7 +125,14 @@ class Screen_2 : Fragment() {
             withContext(Dispatchers.Main) {
                 binding?.progressCircular?.visibility = View.GONE
                 binding?.recyclerViewAdapter?.visibility = View.VISIBLE
-                var baoardAdapter = list?.let { BoardRecycleViewAd(it) }
+                var baoardAdapter = list?.let {
+                    activity?.let { activity ->
+                        BoardRecycleViewAd(
+                            it,
+                            activity
+                        ) {}
+                    }
+                }
                 binding?.recyclerViewAdapter?.adapter = baoardAdapter
                 Log.d("DATA", "fetchData: ${list.toString()} ")
             }

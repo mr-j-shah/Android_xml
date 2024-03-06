@@ -1,5 +1,6 @@
 package com.crestinfosystems_jinay.trello.Screens_Activity.setting.projects
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -34,7 +35,12 @@ class ProjectList : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 binding?.progressCircular?.visibility = View.GONE
                 binding?.recyclerViewAdapter?.visibility = View.VISIBLE
-                var baoardAdapter = list?.let { BoardRecycleViewAd(it) }
+                var baoardAdapter = list?.let {
+                    BoardRecycleViewAd(it, this@ProjectList) {
+                        var intent = Intent(this@ProjectList, Detail_Project_View::class.java)
+                        startActivity(intent)
+                    }
+                }
                 binding?.recyclerViewAdapter?.adapter = baoardAdapter
             }
         }

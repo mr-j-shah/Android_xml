@@ -2,7 +2,10 @@ package com.crestinfosystems_jinay.trello.data
 
 import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parceler
 
+@Parcelize
 data class Board(
     val name: String = "",
     val des: String = "",
@@ -18,22 +21,7 @@ data class Board(
     }
 
 
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) = with(parcel) {
-        parcel.writeString(name)
-        parcel.writeString(des)
-        parcel.writeString(createdBy)
-        writeStringList(assignedTo)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Board> {
-        override fun createFromParcel(parcel: Parcel): Board {
-            return Board(parcel)
-        }
+    companion object : Parceler<Board> {
         fun toObj(data: Map<String, Any>): Board {
             return Board(
                 name = data["name"].toString(),
@@ -42,8 +30,16 @@ data class Board(
                 assignedTo = data["assignedTo"] as ArrayList<String>
             )
         }
-        override fun newArray(size: Int): Array<Board?> {
-            return arrayOfNulls(size)
+
+        override fun Board.write(parcel: Parcel, flags: Int) = with(parcel) {
+            parcel.writeString(name)
+            parcel.writeString(des)
+            parcel.writeString(createdBy)
+            writeStringList(assignedTo)
+        }
+
+        override fun create(parcel: Parcel): Board {
+            return Board(parcel)
         }
     }
 }

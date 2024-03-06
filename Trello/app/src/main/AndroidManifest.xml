@@ -15,6 +15,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".Screens_Activity.setting.projects.Detail_Project_View"
+            android:exported="false" />
+        <activity
             android:name=".Screens_Activity.setting.projects.ProjectList"
             android:exported="false" />
         <activity

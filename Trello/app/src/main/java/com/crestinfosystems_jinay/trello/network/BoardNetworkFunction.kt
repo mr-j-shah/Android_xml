@@ -2,6 +2,7 @@ package com.crestinfosystems_jinay.trello.network
 
 import com.crestinfosystems_jinay.trello.data.Board
 import com.crestinfosystems_jinay.trello.data.UserData
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -9,12 +10,14 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 val database = FirebaseFirestore.getInstance();
+val realTimeDatabase = FirebaseDatabase.getInstance()
 fun createNewBoard(board: Board, onTap: () -> Unit) {
     if (board.name != null) {
         database.collection("Boards").document(board.name.toString())
             .set(board, SetOptions.merge()).addOnSuccessListener {
                 onTap()
             }
+        realTimeDatabase.reference.child("Projects").child(board.name).setValue(board)
     }
 }
 
