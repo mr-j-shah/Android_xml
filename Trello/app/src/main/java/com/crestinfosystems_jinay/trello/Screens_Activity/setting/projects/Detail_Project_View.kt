@@ -3,7 +3,6 @@ package com.crestinfosystems_jinay.trello.Screens_Activity.setting.projects
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,14 +25,15 @@ import com.google.firebase.database.ValueEventListener
 class Detail_Project_View : AppCompatActivity() {
     var list = mutableListOf<Task>()
     var binding: ActivityDetailProjectViewBinding? = null
-    var baoardAdapter = TaskAdapter(
-        arrayListOf()
-    )
+    var baoardAdapter: TaskAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityDetailProjectViewBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         val board: Board = intent.getParcelableExtra("board") ?: Board(name = "Trello")
+        baoardAdapter = TaskAdapter(
+            arrayListOf(), this, board
+        )
         binding?.toolbarExercise?.title = board.name
         setContentView(binding?.root)
         realTimeDataChange(board)
@@ -47,6 +47,7 @@ class Detail_Project_View : AppCompatActivity() {
         binding?.floatingActionButton?.setOnClickListener {
             Dialogfunction(board)
         }
+
         setAdpater()
     }
 
@@ -67,16 +68,12 @@ class Detail_Project_View : AppCompatActivity() {
                     if (value["task"] != null) {
                         val taskList = value["task"] as Map<*, *>
                         for ((key, value) in taskList) {
-                            Log.d(
-                                "Task List",
-                                "Task List for ${key} :: ${
-                                    Task.toObj(value as Map<String, Any>)
-                                }"
-                            )
-                            list.add(Task.toObj(value as Map<String, Any>))
+                            val valueOfTask = (value as Map<String, Any>).toMutableMap()
+                            valueOfTask["key"] = key as Any
+                            list.add(Task(valueOfTask))
                         }
                     }
-                    baoardAdapter.submitList(list as ArrayList<Task>)
+                    baoardAdapter?.submitList(list as ArrayList<Task>)
                     println("Data from Firebase: $value")
                 }
 

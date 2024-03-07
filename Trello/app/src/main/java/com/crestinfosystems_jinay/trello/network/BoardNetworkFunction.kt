@@ -31,6 +31,23 @@ fun addNewTask(task: Task, board: Board, onTap: () -> Unit) {
     }
 }
 
+fun updateNewTask(task: Task, board: Board, onTap: () -> Unit) {
+    if (task.title != null) {
+        realTimeDatabase.reference.child("Projects").child(board.name).child("task").child(task.key)
+            .updateChildren(task.toMap()).addOnSuccessListener {
+                onTap()
+            }
+    }
+}
+fun deleteNewTask(task: Task, board: Board, onTap: () -> Unit) {
+    if (task.title != null) {
+        realTimeDatabase.reference.child("Projects").child(board.name).child("task").child(task.key)
+            .removeValue().addOnSuccessListener {
+                onTap()
+            }
+    }
+}
+
 suspend fun readUserAllUserOnApplication(): List<String>? {
     return suspendCancellableCoroutine { continuation ->
         val ref: CollectionReference = database.collection("Users")

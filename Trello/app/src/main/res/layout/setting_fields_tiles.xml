@@ -28,9 +28,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:padding="15dp"
         android:id="@+id/tile_nextScreen"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="30dp"
         android:src="@drawable/ic_next_screen"
         app:layout_constraintBottom_toBottomOf="parent"
