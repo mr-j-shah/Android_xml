@@ -76,7 +76,7 @@ class Screen_2 : Fragment() {
                 }
                 suggestions -= user?.email!!
                 val customAdapter = activity?.let {
-                    AutoCompleteViewAd(it, suggestions) { selectedSuggestion ->
+                    AutoCompleteViewAd(it, suggestions as ArrayList<String>) { selectedSuggestion ->
                         // Handle the custom event when a suggestion is tapped
                         Toast.makeText(it, "User: $selectedSuggestion", Toast.LENGTH_SHORT).show()
                         if (!assignTo.contains(selectedSuggestion)) {
@@ -159,8 +159,7 @@ class Screen_2 : Fragment() {
                     Toast.makeText(activity, "Board Created Successfully", Toast.LENGTH_SHORT)
                         .show()
                 }
-            }
-            else{
+            } else {
                 Toast.makeText(activity, "Enter Correct Details", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -174,12 +173,11 @@ class Screen_2 : Fragment() {
         val chip = Chip(bottomSheetBinding.chipGroup.context)
         chip.text = text
         chip.isClickable = true
-        chip.isCloseIconVisible = true
-        // Handle chip removal
+        chip.isCloseIconVisible = false
+
         chip.setOnCloseIconClickListener {
             bottomSheetBinding.chipGroup.removeView(chip)
         }
-        // Add chip to the ChipGroup
         bottomSheetBinding.chipGroup.addView(chip)
     }
 

@@ -8,7 +8,7 @@ import android.widget.TextView
 
 class AutoCompleteViewAd(
     context: Context,
-    private val items: List<String>,
+    private val items: ArrayList<String>,
     private val suggestionClickListener: (String) -> Unit,
 
     ) :
@@ -20,5 +20,11 @@ class AutoCompleteViewAd(
             suggestionClickListener.invoke(getItem(position) ?: "")
         }
         return view
+    }
+
+    fun submitList(newData: ArrayList<String>) {
+        items.clear()
+        items.addAll(newData)
+        notifyDataSetChanged()
     }
 }

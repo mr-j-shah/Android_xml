@@ -22,6 +22,16 @@ fun createNewBoard(board: Board, onTap: () -> Unit) {
     }
 }
 
+fun updateNewBoard(board: Board, onTap: () -> Unit) {
+    if (board.name != null) {
+        database.collection("Boards").document(board.name.toString())
+            .update(board.toMap()).addOnSuccessListener {
+                onTap()
+            }
+        realTimeDatabase.reference.child("Projects").child(board.name).updateChildren(board.toMap())
+    }
+}
+
 fun addNewTask(task: Task, board: Board, onTap: () -> Unit) {
     if (task.title != null) {
         realTimeDatabase.reference.child("Projects").child(board.name).child("task").push()
@@ -39,6 +49,7 @@ fun updateNewTask(task: Task, board: Board, onTap: () -> Unit) {
             }
     }
 }
+
 fun deleteNewTask(task: Task, board: Board, onTap: () -> Unit) {
     if (task.title != null) {
         realTimeDatabase.reference.child("Projects").child(board.name).child("task").child(task.key)

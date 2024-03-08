@@ -1,36 +1,56 @@
 package com.crestinfosystems_jinay.trello.Screens_Activity.setting.projects
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.crestinfosystems_jinay.trello.adapter.AutoCompleteViewAd
 import com.crestinfosystems_jinay.trello.adapter.TaskAdapter
 import com.crestinfosystems_jinay.trello.data.Board
 import com.crestinfosystems_jinay.trello.data.State
 import com.crestinfosystems_jinay.trello.data.Task
 import com.crestinfosystems_jinay.trello.databinding.ActivityDetailProjectViewBinding
 import com.crestinfosystems_jinay.trello.databinding.AddTaskBottomSheetBinding
+import com.crestinfosystems_jinay.trello.databinding.EditAssigneesBinding
 import com.crestinfosystems_jinay.trello.network.addNewTask
+import com.crestinfosystems_jinay.trello.network.readUserAllUserOnApplication
+import com.crestinfosystems_jinay.trello.network.updateNewBoard
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.chip.Chip
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Detail_Project_View : AppCompatActivity() {
     var list = mutableListOf<Task>()
     var binding: ActivityDetailProjectViewBinding? = null
     var baoardAdapter: TaskAdapter? = null
-
+    var assignTo: MutableList<String> = mutableListOf<String>()
+    var suggestions: List<String> = listOf()
+    var customAdapter: AutoCompleteViewAd? = null
     override fun onCreate(savedInstanceState: Bundle?) {
+
         binding = ActivityDetailProjectViewBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         val board: Board = intent.getParcelableExtra("board") ?: Board(name = "Trello")
+        if (board.createdBy != FirebaseAuth.getInstance().currentUser?.email) {
+            binding?.editProject?.visibility = View.GONE
+        }
         baoardAdapter = TaskAdapter(
             arrayListOf(), this, board
         )
@@ -47,7 +67,9 @@ class Detail_Project_View : AppCompatActivity() {
         binding?.floatingActionButton?.setOnClickListener {
             Dialogfunction(board)
         }
-
+        binding?.editProject?.setOnClickListener {
+            editDialogFunction(board)
+        }
         setAdpater()
     }
 
@@ -82,6 +104,62 @@ class Detail_Project_View : AppCompatActivity() {
                     println("Error reading data: ${error.message}")
                 }
             })
+    }
+
+    private fun editDialogFunction(board: Board) {
+        var user = com.google.firebase.ktx.Firebase.auth.currentUser
+        val editDialog = EditAssigneesBinding.inflate(layoutInflater)
+        CoroutineScope(Dispatchers.IO).launch {
+            var data = readUserAllUserOnApplication()
+            Log.d("User Data", data.toString())
+            withContext(Dispatchers.Main) {
+                editDialog.editDialogContent.visibility = View.VISIBLE
+                if (data != null) {
+                    suggestions = data
+                }
+                suggestions -= user?.email!!
+                suggestions -= board.assignedTo
+                Log.d("Assign List", "editDialogFunction: $suggestions")
+                for (i in board.assignedTo) {
+                    addChip(i, editDialog)
+                }
+                val customAdapter = this@Detail_Project_View.let {
+                    AutoCompleteViewAd(it, suggestions as ArrayList<String>) { selectedSuggestion ->
+                        Toast.makeText(it, "User: $selectedSuggestion", Toast.LENGTH_SHORT).show()
+                        if (!assignTo.contains(selectedSuggestion)) {
+                            addChip(selectedSuggestion, editDialog)
+                        }
+                        editDialog.autoCompleteTextView.setText("")
+                    }
+                }
+                editDialog.autoCompleteTextView.setAdapter(customAdapter)
+            }
+        }
+        val dialog = Dialog(this)
+        dialog.setContentView(editDialog.root)
+        editDialog.dialogBtnNo.setOnClickListener {
+            updateNewBoard(board = board.copy(assignedTo = assignTo as ArrayList<String>)) {}
+            dialog.dismiss()
+        }
+        editDialog.dialogBtnYes.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    fun addChip(text: String, bottomSheetBinding: EditAssigneesBinding) {
+        assignTo.add(text)
+        val chip = Chip(bottomSheetBinding.chipGroup.context)
+        chip.text = text
+        chip.isClickable = true
+        chip.isCloseIconVisible = true
+        chip.setOnCloseIconClickListener {
+            suggestions += text
+            customAdapter?.submitList(suggestions as ArrayList<String>)
+            bottomSheetBinding.chipGroup.removeView(chip)
+        }
+
+        bottomSheetBinding.chipGroup.addView(chip)
     }
 
     private fun Dialogfunction(board: Board) {

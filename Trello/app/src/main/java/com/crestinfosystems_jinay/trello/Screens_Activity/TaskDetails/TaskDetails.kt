@@ -41,6 +41,10 @@ class TaskDetails : AppCompatActivity() {
             binding?.cardDone?.visibility = View.GONE
             binding?.cardPin?.visibility = View.GONE
             binding?.cardTodo?.visibility = View.VISIBLE
+        } else if (taskFromIntent?.state == State.doing) {
+            binding?.cardDone?.visibility = View.VISIBLE
+            binding?.cardPin?.visibility = View.GONE
+            binding?.cardTodo?.visibility = View.VISIBLE
         }
         binding?.cardTodo?.setOnClickListener {
             taskFromIntent?.copy(state = State.todo)

@@ -8,7 +8,6 @@
     tools:context=".Screens_Activity.setting.projects.Detail_Project_View">
 
 
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_exercise"
         android:layout_width="match_parent"
@@ -20,7 +19,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="Trello"
 
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/white">
+
+        <ImageView
+            android:id="@+id/edit_project"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/ic_edit"
+            android:tint="@color/white" />
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_adapter"

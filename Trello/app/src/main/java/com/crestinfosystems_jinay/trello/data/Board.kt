@@ -42,4 +42,13 @@ data class Board(
             return Board(parcel)
         }
     }
+
+    fun toMap(): Map<String, Any> {
+        return mapOf<String, Any>(
+            "name" to name,
+            "des" to des,
+            "createdBy" to createdBy,
+            "assignedTo" to assignedTo,
+        )
+    }
 }
