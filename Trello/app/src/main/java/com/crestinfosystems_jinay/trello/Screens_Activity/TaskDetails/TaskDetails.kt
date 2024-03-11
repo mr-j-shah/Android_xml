@@ -1,5 +1,6 @@
 package com.crestinfosystems_jinay.trello.Screens_Activity.TaskDetails
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -68,7 +69,11 @@ class TaskDetails : AppCompatActivity() {
             }
         }
         binding?.cardDelete?.setOnClickListener {
-            deleteNewTask(taskFromIntent!!, board = baordFromIntent!!) {
+            deleteNewTask(
+                taskFromIntent!!,
+                board = baordFromIntent!!,
+                context = applicationContext
+            ) {
                 onBackPressed()
                 Toast.makeText(this, "Task Deleted", Toast.LENGTH_SHORT).show()
             }
@@ -80,7 +85,7 @@ class TaskDetails : AppCompatActivity() {
             taskFromIntent!!.copy(
                 state = state,
                 lastEdit = FirebaseAuth.getInstance().currentUser?.email.toString()
-            ), board
+            ), board, context = applicationContext
         ) {
             onTap()
         }

@@ -1,5 +1,8 @@
 package com.crestinfosystems_jinay.trello.network
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import com.crestinfosystems_jinay.trello.data.Board
 import com.crestinfosystems_jinay.trello.data.Task
 import com.crestinfosystems_jinay.trello.data.UserData
@@ -7,11 +10,14 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.gson.Gson
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
+
 val database = FirebaseFirestore.getInstance();
 val realTimeDatabase = FirebaseDatabase.getInstance()
+
 fun createNewBoard(board: Board, onTap: () -> Unit) {
     if (board.name != null) {
         database.collection("Boards").document(board.name.toString())
@@ -32,7 +38,12 @@ fun updateNewBoard(board: Board, onTap: () -> Unit) {
     }
 }
 
-fun addNewTask(task: Task, board: Board, onTap: () -> Unit) {
+fun addNewTask(task: Task, board: Board, context: Context, onTap: () -> Unit) {
+    val preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+    val editor: Editor = preferences.edit()
+    editor.putString("lastedit", Gson().toJson(task.toMap()));
+    editor.apply();
+
     if (task.title != null) {
         realTimeDatabase.reference.child("Projects").child(board.name).child("task").push()
             .setValue(task).addOnSuccessListener {
@@ -41,7 +52,11 @@ fun addNewTask(task: Task, board: Board, onTap: () -> Unit) {
     }
 }
 
-fun updateNewTask(task: Task, board: Board, onTap: () -> Unit) {
+fun updateNewTask(task: Task, board: Board, context: Context, onTap: () -> Unit) {
+    val preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+    val editor: Editor = preferences.edit()
+    editor.putString("lastedit", Gson().toJson(task.toMap()));
+    editor.apply();
     if (task.title != null) {
         realTimeDatabase.reference.child("Projects").child(board.name).child("task").child(task.key)
             .updateChildren(task.toMap()).addOnSuccessListener {
@@ -50,7 +65,11 @@ fun updateNewTask(task: Task, board: Board, onTap: () -> Unit) {
     }
 }
 
-fun deleteNewTask(task: Task, board: Board, onTap: () -> Unit) {
+fun deleteNewTask(task: Task, board: Board, context: Context, onTap: () -> Unit) {
+    val preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+    val editor: Editor = preferences.edit()
+    editor.putString("lastedit", Gson().toJson(task.toMap()));
+    editor.apply();
     if (task.title != null) {
         realTimeDatabase.reference.child("Projects").child(board.name).child("task").child(task.key)
             .removeValue().addOnSuccessListener {

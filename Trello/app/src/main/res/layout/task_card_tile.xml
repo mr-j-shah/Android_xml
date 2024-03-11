@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
             android:padding="10dp"
+            android:textColor="@color/black"
             android:text="TODO"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +43,7 @@
                 android:layout_marginEnd="5dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Client Meeting"
+                android:textColor="@color/black"
                 android:textSize="18sp" />
 
             <TextView
@@ -51,6 +53,7 @@
                 android:layout_marginEnd="5dp"
                 android:fontFamily="@font/poppins_regular"
                 android:justificationMode="inter_word"
+                android:textColor="@color/black"
                 android:text="Jinay Jinay Jinay Jinay Jinay Jinay Jinay Jinay JinayJinayJinayJinaysadasdasdasasdasdasdasdadasdasdsdasdasasdassdasdasdasdasdasdasdasdasasdasdasdasdasdadasdasdasasdasasddasdasda"
                 android:textSize="14sp" />
 
@@ -60,6 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+
                 android:layout_marginEnd="5dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="shahjinay02@gmail.com"

@@ -1,6 +1,7 @@
 package com.crestinfosystems_jinay.trello.Screens_Activity.setting.projects
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -43,8 +44,8 @@ class Detail_Project_View : AppCompatActivity() {
     var assignTo: MutableList<String> = mutableListOf<String>()
     var suggestions: List<String> = listOf()
     var customAdapter: AutoCompleteViewAd? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityDetailProjectViewBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         val board: Board = intent.getParcelableExtra("board") ?: Board(name = "Trello")
@@ -224,6 +225,7 @@ class Detail_Project_View : AppCompatActivity() {
                         lastEdit = user?.email.toString(),
                         state = State.todo
                     ),
+                    context = applicationContext,
                     board = Board(
                         name = board.name,
                         des = board.des,

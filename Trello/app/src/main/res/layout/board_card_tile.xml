@@ -7,6 +7,7 @@
     android:layout_marginBottom="10dp"
     android:clickable="true"
     android:elevation="5dp"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:textColor="@color/black"
                 android:id="@+id/board_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -32,6 +34,7 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:textColor="@color/black"
                 android:id="@+id/board_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
