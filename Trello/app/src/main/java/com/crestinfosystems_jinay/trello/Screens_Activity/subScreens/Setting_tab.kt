@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.crestinfosystems_jinay.trello.MainActivity
 import com.crestinfosystems_jinay.trello.R
 import com.crestinfosystems_jinay.trello.Screens_Activity.setting.ProfileScreen.Profile_Screen
+import com.crestinfosystems_jinay.trello.Screens_Activity.setting.User_Manual
 import com.crestinfosystems_jinay.trello.Screens_Activity.setting.projects.ProjectList
 import com.crestinfosystems_jinay.trello.adapter.SettingTabAdapter
 import com.crestinfosystems_jinay.trello.data.SettinsTilesFilelds
@@ -36,10 +37,11 @@ class Setting_tab : Fragment() {
             },
             SettinsTilesFilelds(
                 id = 1,
-                title = "Conversation",
+                title = "User Manual",
                 icon = R.drawable.ic_setting_conversation
             ) {
-
+                var intent = Intent(activity, User_Manual::class.java)
+                startActivity(intent)
             },
             SettinsTilesFilelds(
                 id = 2,
@@ -54,11 +56,11 @@ class Setting_tab : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             },
-            SettinsTilesFilelds(
-                id = 3,
-                title = "Terms and Conditions",
-                icon = R.drawable.ic_setting_terms_and_condition,
-                {}),
+//            SettinsTilesFilelds(
+//                id = 3,
+//                title = "Terms and Conditions",
+//                icon = R.drawable.ic_setting_terms_and_condition,
+//                {}),
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {

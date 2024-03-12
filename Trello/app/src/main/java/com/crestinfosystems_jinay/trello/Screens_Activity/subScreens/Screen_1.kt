@@ -42,33 +42,37 @@ class Screen_1 : Fragment() {
         val applicationContext: Context = requireContext()
         val preferences =
             applicationContext.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
-        val lastedit = preferences.getString("lastedit", "")
-        val resultMap: Map<String, Any> = jsonStringToMap(lastedit!!)
-        lastUpdateTask = Task(resultMap)
-        binding?.lastEditBy?.boardTitle?.text = lastUpdateTask?.title
-        binding?.lastEditBy?.boardDesc?.text = lastUpdateTask?.desc
-        binding?.lastEditBy?.lastEditBy?.visibility = View.GONE
-        binding?.lastEditBy?.state?.text = lastUpdateTask?.state.toString().uppercase()
-        when (lastUpdateTask?.state) {
-            State.todo -> binding?.lastEditBy?.projectCard?.setCardBackgroundColor(
-                Color.parseColor(
-                    "#FFEB3B"
+        if (preferences.contains("lastedit")) {
+            val lastedit = preferences.getString("lastedit", "")
+            val resultMap: Map<String, Any> = jsonStringToMap(lastedit!!)
+            lastUpdateTask = Task(resultMap)
+            binding?.lastEditBy?.boardTitle?.text = lastUpdateTask?.title
+            binding?.lastEditBy?.boardDesc?.text = lastUpdateTask?.desc
+            binding?.lastEditBy?.lastEditBy?.visibility = View.GONE
+            binding?.lastEditBy?.state?.text = lastUpdateTask?.state.toString().uppercase()
+            when (lastUpdateTask?.state) {
+                State.todo -> binding?.lastEditBy?.projectCard?.setCardBackgroundColor(
+                    Color.parseColor(
+                        "#FFEB3B"
+                    )
                 )
-            )
 
-            State.doing -> binding?.lastEditBy?.projectCard?.setCardBackgroundColor(
-                Color.parseColor(
-                    "#4CAF50"
+                State.doing -> binding?.lastEditBy?.projectCard?.setCardBackgroundColor(
+                    Color.parseColor(
+                        "#4CAF50"
+                    )
                 )
-            )
 
-            State.done -> binding?.lastEditBy?.projectCard?.setCardBackgroundColor(
-                Color.parseColor(
-                    "#B0BEC5"
+                State.done -> binding?.lastEditBy?.projectCard?.setCardBackgroundColor(
+                    Color.parseColor(
+                        "#B0BEC5"
+                    )
                 )
-            )
 
-            else -> {}
+                else -> {}
+            }
+        } else {
+            binding?.lastEditBy?.projectCard?.visibility = View.GONE
         }
     }
 
