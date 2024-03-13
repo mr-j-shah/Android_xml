@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.crestinfosystems_jinay.trello.data.SettinsTilesFilelds
 import com.crestinfosystems_jinay.trello.databinding.SettingFieldsTilesBinding
 
-class SettingTabAdapter(var list: List<SettinsTilesFilelds>) :
+class  SettingTabAdapter(var list: List<SettinsTilesFilelds>) :
     RecyclerView.Adapter<SettingTabAdapter.ViewHolder>() {
 
 

@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.crestinfosystems_jinay.trello.R
+import com.crestinfosystems_jinay.trello.adapter.CorouselView
 import com.crestinfosystems_jinay.trello.data.State
 import com.crestinfosystems_jinay.trello.data.Task
 import com.crestinfosystems_jinay.trello.databinding.FragmentScreen1Binding
@@ -30,6 +32,7 @@ class Screen_1 : Fragment() {
     ): View? {
         binding = FragmentScreen1Binding.inflate(inflater, container, false)
         getLastEditTask()
+        setCourouselAdapter()
         return binding?.root
     }
 
@@ -76,4 +79,13 @@ class Screen_1 : Fragment() {
         }
     }
 
+    private fun setCourouselAdapter() {
+        val arrayList = ArrayList<Int>()
+        arrayList.add(R.drawable.slider_1)
+        arrayList.add(R.drawable.slider_2)
+        arrayList.add(R.drawable.slider_3)
+        arrayList.add(R.drawable.slider_4)
+        val adapter = CorouselView(arrayList)
+        binding?.recycler?.setAdapter(adapter)
+    }
 }
